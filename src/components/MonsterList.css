@@ -1,0 +1,21 @@
+.monster-list__wrap {
+  margin-top: 1rem;
+}
+.monster-list__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1.1rem;
+}
+
+.monster-list__title {
+  margin: 0 0 .5rem;
+  letter-spacing: .2px;
+}
+
+/* optional soft grid glow */
+.monster-list__grid::before {
+  content: "";
+  grid-column: 1 / -1;
+  height: 0;
+  box-shadow: 0 -60px 120px rgba(0,230,27,0.08) inset;
+}

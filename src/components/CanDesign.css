@@ -1,0 +1,3 @@
+.can { text-align: center; }
+.can__svg { width: 160px; height: auto; display: block; margin: 0 auto; }
+.can__caption { margin-top: .5rem; color: var(--muted); text-transform: capitalize; }

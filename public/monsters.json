@@ -1,0 +1,27 @@
+[
+    {
+      "id": 1,
+      "name": "Monster Original",
+      "price": 2.5,
+      "type": "Energy",
+      "description": "La boisson énergisante classique de Monster avec un goût unique.",
+      "imageUrl": "https://example.com/images/monster-original.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Monster Ultra",
+      "price": 2.8,
+      "type": "Sugar-Free",
+      "description": "Version sans sucre, au goût rafraîchissant et léger.",
+      "imageUrl": "https://example.com/images/monster-ultra.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Monster Mango Loco",
+      "price": 3.0,
+      "type": "Juice",
+      "description": "Mélange fruité inspiré du Día de los Muertos, goût mangue tropicale.",
+      "imageUrl": "https://example.com/images/monster-mango-loco.jpg"
+    }
+  ]
+  
