@@ -3,9 +3,10 @@ import './Header.css'
 
 interface HeaderProps {
   onSearch?: (searchTerm: string) => void;
+  onNavigate?: (page: string) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onSearch }) => {
+const Header: React.FC<HeaderProps> = ({ onSearch, onNavigate }) => {
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   return (
@@ -13,7 +14,12 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
       <div className="container header__inner">
         <a href="#" className="brand" aria-label="Monster Energy Home">
           <span className="brand__mark" />
-          <span className="brand__text">Monster Front</span>
+          <button onClick={() => onNavigate?.("home")}>
+            <span className="brand__text">
+            Monster Front
+          </span>
+          </button>
+          
         </a>
 
         <button
@@ -29,10 +35,14 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
         </button>
 
         <nav id="primary-nav" className="nav" aria-label="Primary">
-          <a className="nav__link" href="#">Accueil</a>
-          <a className="nav__link" href="#">Catalogue</a>
-          <a className="nav__link" href="#">Saveurs</a>
-          <a className="nav__link" href="#">Contact</a>
+          <button
+            className="nav__link"
+            onClick={() => onNavigate?.("catalogue")}
+          >
+            Catalogue
+          </button>
+          <button className="nav__link">Saveurs</button>
+          <button className="nav__link">Contact</button>
         </nav>
 
         <form
