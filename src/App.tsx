@@ -7,9 +7,8 @@ function App() {
     <div className="app-shell">
       <Header />
       <main className="container main">
-        {/* Zone de contenu – prochainement: grille du catalogue */}
         <h1 className="page-title">Catalogue Monster</h1>
-        <p className="muted">Commence à ajouter les produits ici…</p>
+        <p className="muted">Le contenu du catalogue sera branché sur la base de données prochainement.</p>
       </main>
       <Footer />
     </div>
