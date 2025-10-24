@@ -18,19 +18,14 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`${API_URL}/monsters`);
+        const response = await fetch(`${API_URL}/monsters/type/${type}`);
 
         if (!response.ok) {
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
 
         const data: MonsterT[] = await response.json();
-
-        // Filtrer les monstres par type
-        const filteredMonsters = data.filter(
-          (monster) => monster.type === type
-        );
-        setMonsters(filteredMonsters);
+        setMonsters(data);
       } catch (error) {
         console.error("Erreur de chargement :", error);
         setError(error instanceof Error ? error.message : "Erreur inconnue");
