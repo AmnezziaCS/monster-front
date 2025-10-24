@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import type { MonsterT } from "../types/Monsters";
+import type { components } from "../types/api-types";
 import Monster from "./Monster";
 import './MonsterList.css'
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 const MonsterList = () => {
-  const [monsters, setMonsters] = useState<MonsterT[]>([]);
+  const [monsters, setMonsters] = useState<components["schemas"]["MonsterDto"][]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,7 +21,7 @@ const MonsterList = () => {
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
 
-        const data: MonsterT[] = await response.json();
+  const data: components["schemas"]["MonsterDto"][] = await response.json();
         setMonsters(data);
       } catch (error) {
         console.error("Erreur de chargement :", error);

@@ -95,8 +95,7 @@
 @media (min-width: 720px) {
   .menu-btn { display: none; }
 }
-
-/* Mobile nav panel */
+/* Mobile */
 @media (max-width: 719.98px) {
   .header {
     position: sticky;
