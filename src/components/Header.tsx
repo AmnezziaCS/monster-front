@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
 import './Header.css'
 
-const Header: React.FC = () => {
-  const [open, setOpen] = useState(false)
+interface HeaderProps {
+  onSearch?: (searchTerm: string) => void;
+}
+
+const Header: React.FC<HeaderProps> = ({ onSearch }) => {
+  const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   return (
     <header className={`header${open ? ' is-open' : ''}`}>
       <div className="container header__inner">
@@ -30,17 +35,30 @@ const Header: React.FC = () => {
           <a className="nav__link" href="#">Contact</a>
         </nav>
 
-        <form className="search" role="search" aria-label="Recherche">
+        <form
+          className="search"
+          role="search"
+          aria-label="Recherche"
+          onSubmit={(e) => {
+            e.preventDefault();
+            onSearch?.(searchTerm);
+          }}
+        >
           <input
             className="search__input"
             type="search"
             placeholder="Rechercher une canette..."
             aria-label="Rechercher"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              onSearch?.(e.target.value);
+            }}
           />
         </form>
       </div>
     </header>
-  )
-}
+  );
+};
 
 export default Header

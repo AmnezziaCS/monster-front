@@ -5,7 +5,11 @@ import './MonsterList.css'
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";
 
-const MonsterList = () => {
+interface MonsterListProps {
+  searchTerm?: string;
+}
+
+const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
   const [monsters, setMonsters] = useState<MonsterT[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -52,14 +56,37 @@ const MonsterList = () => {
     );
   }
 
+  const filteredMonsters = monsters.filter((monster) => {
+    if (!searchTerm.trim()) return true;
+
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      monster.name.toLowerCase().includes(searchLower) ||
+      monster.type.toLowerCase().includes(searchLower)
+    );
+  });
+
   return (
     <div className="monster-list__wrap">
-      <h1 className="monster-list__title">Liste des Monster Energy ({monsters.length} produits)</h1>
+      <h1 className="monster-list__title">
+        Liste des Monster Energy ({filteredMonsters.length} produits)
+        {searchTerm && (
+          <span className="monster-list__search-info">
+            {" "}
+            - Recherche: "{searchTerm}"
+          </span>
+        )}
+      </h1>
       <div className="monster-list__grid">
-        {monsters.map((monster) => (
+        {filteredMonsters.map((monster) => (
           <Monster key={monster.id} monster={monster} />
         ))}
       </div>
+      {searchTerm && filteredMonsters.length === 0 && (
+        <p className="monster-list__no-results">
+          Aucun produit trouvé pour "{searchTerm}"
+        </p>
+      )}
     </div>
   );
 };
