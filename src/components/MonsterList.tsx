@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { MonsterT } from "../types/Monsters";
 import Monster from "./Monster";
-import './MonsterList.css'
+import "./MonsterList.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";
 
@@ -40,7 +40,6 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
   if (loading) {
     return (
       <div>
-        <h1 className="monster-list__title">Liste des Monster Energy</h1>
         <p>Chargement des produits...</p>
       </div>
     );
@@ -49,7 +48,6 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
   if (error) {
     return (
       <div>
-        <h1 className="monster-list__title">Liste des Monster Energy</h1>
         <p style={{ color: "red" }}>Erreur: {error}</p>
         <p>Vérifiez que le backend est démarré sur le port 3000</p>
       </div>
@@ -68,15 +66,6 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
 
   return (
     <div className="monster-list__wrap">
-      <h1 className="monster-list__title">
-        Liste des Monster Energy ({filteredMonsters.length} produits)
-        {searchTerm && (
-          <span className="monster-list__search-info">
-            {" "}
-            - Recherche: "{searchTerm}"
-          </span>
-        )}
-      </h1>
       <div className="monster-list__grid">
         {filteredMonsters.map((monster) => (
           <Monster key={monster.id} monster={monster} />

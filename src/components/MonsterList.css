@@ -7,11 +7,6 @@
   gap: 1.1rem;
 }
 
-.monster-list__title {
-  margin: 0 0 .5rem;
-  letter-spacing: .2px;
-}
-
 /* optional soft grid glow */
 .monster-list__grid::before {
   content: "";
