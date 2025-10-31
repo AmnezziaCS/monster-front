@@ -60,7 +60,6 @@ export async function scrollDownUp(page, cycles = 2, step = 400, delay = 10) {
         while (y < total - window.innerHeight) {
           y = Math.min(y + s, total);
           window.scrollTo(0, y);
-          // @ts-ignore
           await new Promise((r) => setTimeout(r, d));
         }
       },
@@ -82,5 +81,42 @@ export async function scrollDownUp(page, cycles = 2, step = 400, delay = 10) {
       delay
     );
   }
+}
+
+export async function getElementsCount(page, selector) {
+  await page.waitForSelector(selector);
+  const count = await page.$$eval(selector, (els) => els.length);
+  return count;
+}
+
+export async function clickByIndex(page, selector, index) {
+  await page.waitForSelector(selector);
+  const handles = await page.$$(selector);
+  const handle = handles[index];
+  if (!handle) throw new Error(`Aucun élément à l'index ${index} pour ${selector}`);
+  await page.evaluate((el) => {
+    if (el && typeof el.scrollIntoView === "function") {
+      el.scrollIntoView({ behavior: "instant", block: "center", inline: "center" });
+    }
+    if (el && typeof el.click === "function") {
+      el.click();
+    }
+  }, handle);
+}
+
+export function randomInt(min, max) {
+  const a = Math.ceil(min);
+  const b = Math.floor(max);
+  return Math.floor(Math.random() * (b - a + 1)) + a;
+}
+
+export async function clearInput(page, selector) {
+  await page.evaluate((sel) => {
+    const input = document.querySelector(sel);
+    if (input) {
+      input.value = "";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+  }, selector);
 }
 

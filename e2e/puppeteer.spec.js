@@ -1,5 +1,13 @@
 import puppeteer from "puppeteer";
-import { click, fillInput, scrollDownUp, sleep } from "./actions.js";
+import {
+  click,
+  clearInput,
+  scrollDownUp,
+  sleep,
+  getElementsCount,
+  clickByIndex,
+  randomInt,
+} from "./actions.js";
 
 async function run() {
   const baseUrl = process.env.FRONT_BASE_URL || "http://localhost:5173";
@@ -49,8 +57,8 @@ async function run() {
           ?.textContent?.includes("Catalogue Monster Energy")
     );
 
-    // 3) Cliquer sur 4-5 catégories puis revenir à Catalogue entre chaque
-    for (let i = 0; i < 2; i++) {
+    // 3) Cliquer sur n catégories puis revenir à Catalogue entre chaque
+    for (let i = 0; i < 3; i++) {
       const links = await page.$$("main .container ul li a, ul li a");
       if (!links || links.length === 0) {
         console.warn("Aucun type trouvé dans le catalogue");
@@ -89,34 +97,101 @@ async function run() {
     await click(page, ".brand", "Monster Front");
     await page.waitForSelector(".page-title");
 
-    // 5) Recherche par nom et par type
-    const firstName = await page
-      .$eval(
-        "article.monster .monster__title",
-        (el) => el.textContent?.trim() || ""
-      )
-      .catch(() => "");
-    if (firstName) {
-      await fillInput(page, ".search__input", firstName, "Recherche par nom");
-      await sleep(300);
+    // 4.1) Sur la page d'accueil, cliquer sur 1 ou 2 monsters aléatoires
+    // Essaye d'abord les liens à l'intérieur des cartes
+    const cardLinkSelector = "article.monster a, .monster a";
+    const cardSelectorFallback = "article.monster";
+    let count = 0;
+    try {
+      count = await getElementsCount(page, cardLinkSelector);
+    } catch {
+      count = 0;
     }
-    // Nettoyer
-    await fillInput(page, ".search__input", "", "Reset recherche");
-    // Recherche par type: lire depuis la première carte visible si dispo
-    const firstType = await page
-      .$eval(
-        "article.monster .monster__type",
-        (el) => el.textContent?.trim() || ""
-      )
-      .catch(() => "");
-    if (firstType) {
-      await fillInput(
-        page,
-        ".search__input",
-        firstType,
-        "Recherche par type (champ unique)"
+    if (count === 0) {
+      try {
+        count = await getElementsCount(page, cardSelectorFallback);
+      } catch {
+        count = 0;
+      }
+    }
+    if (count > 0) {
+      const toClick = randomInt(1, Math.min(2, count));
+      for (let k = 0; k < toClick; k++) {
+        const idx = randomInt(0, count - 1);
+        if (await getElementsCount(page, cardLinkSelector).catch(() => 0)) {
+          await clickByIndex(page, cardLinkSelector, idx);
+        } else {
+          await clickByIndex(page, cardSelectorFallback, idx);
+        }
+        // petite attente et retour à l'accueil
+        await sleep(300);
+        await click(page, ".brand", "Monster Front");
+        await page.waitForSelector(".page-title");
+      }
+    }
+    // 5) Recherche par nom et par type (aléatoire + scroll entre les deux)
+
+   // const isMac = process.platform === "darwin";
+   // const modifierKey = isMac ? "Meta" : "Control";
+
+    // Récupère la liste de tous les monstres visibles sur la page
+    const monsterHandles = await page.$$("article.monster");
+
+    if (monsterHandles.length > 0) {
+      // Choisit un monstre aléatoire
+      const randomIndex = randomInt(0, monsterHandles.length - 1);
+      const monsterHandle = monsterHandles[randomIndex];
+
+      // Extrait son nom et son type depuis le DOM
+      const { name, type } = await page.evaluate((el) => {
+        const nameEl = el.querySelector(".monster__title");
+        const typeEl = el.querySelector(".monster__type");
+        return {
+          name: nameEl?.textContent?.trim() || "",
+          type: typeEl?.textContent?.trim() || "",
+        };
+      }, monsterHandle);
+
+      console.log(`E2E: recherche aléatoire avec "${name}" (${type})`);
+
+      // Recherche par nom
+      if (name) {
+        console.log(`E2E: recherche par nom → ${name}`);
+        await page.click(".search__input");
+        await page.type(".search__input", name, { delay: 50 });
+        await sleep(800); 
+      }
+
+     //clear input 
+     await clearInput(page,".search__input");
+      // Recherche par type
+      if (type) {
+        console.log(`E2E: recherche par type → ${type}`);
+        await page.click(".search__input");
+        await page.type(".search__input", type, { delay: 50 });
+        await sleep(800);
+      }
+      await clearInput(page,".search__input");
+
+    } else {
+      console.warn(
+        "Aucun monstre trouvé sur la page pour effectuer les recherches"
       );
-      await sleep(300);
+    }
+
+    // 6) Footer: cliquer tous les liens cliquables
+    await scrollDownUp(page, 1, 500, 5);
+    const footerLinkHandles = await page.$$("footer a");
+    for (const link of footerLinkHandles) {
+      const text = await page.evaluate(
+        (el) => el.textContent?.trim() || "",
+        link
+      );
+      await click(page, "footer a", text);
+      await sleep(100);
+      // revenir à l'accueil si route changée
+      await click(page, ".brand", "Monster Front");
+      await page.waitForSelector(".page-title");
     }
 
     console.log("E2E: OK ");
