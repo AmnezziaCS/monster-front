@@ -6,6 +6,8 @@ import { useState } from "react";
 import Catalogue from "./pages/Catalogue";
 import TypeMonsters from "./pages/TypeMonsters";
 import MonsterDetail from './pages/MonsterDetail'
+import Flavors from './pages/Flavors'
+import Contact from './pages/Contact'
 import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom'
 
 function AppShell() {
@@ -14,7 +16,6 @@ function AppShell() {
 
   const handleSearch = (term: string) => setSearchTerm(term);
   const handleNavigate = (page: string) => {
-    // map old navigation keys to real routes
     switch (page) {
       case 'home': return navigate('/');
       case 'catalogue': return navigate('/catalog');
@@ -33,7 +34,9 @@ function AppShell() {
         <Routes>
           <Route path="/" element={<div><h1 className="page-title">Catalogue Monster</h1><MonsterList searchTerm={searchTerm} /></div>} />
           <Route path="/catalog" element={<Catalogue onTypeClick={handleTypeClick} />} />
+          <Route path="/flavors" element={<Flavors />} />
           <Route path="/type/:type" element={<TypeRoute />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/:id" element={<MonsterDetail/>} />
         </Routes>
       </main>

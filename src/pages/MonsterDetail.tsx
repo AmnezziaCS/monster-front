@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { API_CONFIG } from "../config/api";
 import type { components } from "../types/api-types";
 import './MonsterDetail.css';
 
@@ -16,7 +15,9 @@ const MonsterDetail = () => {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.MONSTER_BY_ID(Number(id))}`);
+        const BASE = (import.meta.env.VITE_API_URL as string) || "/api";
+        const url = `${BASE}${"/monsters/"}${Number(id)}`;
+        const res = await fetch(url);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data: components["schemas"]["MonsterDto"] = await res.json();
         setMonster(data);
