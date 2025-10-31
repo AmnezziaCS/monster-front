@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import type { MonsterT } from "../types/Monsters";
+import type { components } from "../types/api-types";
 import Monster from "./Monster";
 import "./MonsterList.css";
 
@@ -10,7 +10,7 @@ interface MonsterListProps {
 }
 
 const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
-  const [monsters, setMonsters] = useState<MonsterT[]>([]);
+  const [monsters, setMonsters] = useState<components["schemas"]["MonsterDto"][]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,13 +19,17 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`${API_URL}/monsters`);
+        const params = new URLSearchParams();
+        const trimmed = searchTerm.trim();
+        if (trimmed) params.set("name", trimmed);
+        const url = `${API_URL}/monsters${params.toString() ? `?${params.toString()}` : ""}`;
+        const response = await fetch(url);
 
         if (!response.ok) {
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
 
-  const data: components["schemas"]["MonsterDto"][] = await response.json();
+	const data: components["schemas"]["MonsterDto"][] = await response.json();
         setMonsters(data);
       } catch (error) {
         console.error("Erreur de chargement :", error);
@@ -35,7 +39,7 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
       }
     };
     fetchMonsters();
-  }, []);
+  }, [searchTerm]);
 
   if (loading) {
     return (
@@ -56,12 +60,8 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
 
   const filteredMonsters = monsters.filter((monster) => {
     if (!searchTerm.trim()) return true;
-
     const searchLower = searchTerm.toLowerCase();
-    return (
-      monster.name.toLowerCase().includes(searchLower) ||
-      monster.type.toLowerCase().includes(searchLower)
-    );
+    return monster.type.toLowerCase().includes(searchLower) || true;
   });
 
   return (
