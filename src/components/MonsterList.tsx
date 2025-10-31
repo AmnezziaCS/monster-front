@@ -1,5 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import type { components } from "../types/api-types";
+import type { components } from "../types/api-types";
 import Monster from "./Monster";
 import "./MonsterList.css";
 
@@ -10,6 +11,7 @@ interface MonsterListProps {
 }
 
 const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
+  const [monsters, setMonsters] = useState<components["schemas"]["MonsterDto"][]>([]);
   const [monsters, setMonsters] = useState<components["schemas"]["MonsterDto"][]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
