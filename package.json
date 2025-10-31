@@ -8,6 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "test:e2e": "node e2e/puppeteer.spec.js",
+    "test:e2e:ui": "HEADLESS=false SLOWMO=300 node e2e/puppeteer.spec.js",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -27,6 +29,7 @@
     "globals": "^16.4.0",
     "husky": "^8.0.3",
     "openapi-typescript": "^7.10.1",
+    "puppeteer": "^24.27.0",
     "rimraf": "^6.0.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.45.0",
