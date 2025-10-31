@@ -1,0 +1,15 @@
+.monster-detail {
+  padding: 1rem 0;
+}
+.monster-detail__card {
+  display: flex;
+  gap: 1.2rem;
+  align-items: flex-start;
+  background: rgba(18,18,18,0.6);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 12px;
+}
+.monster-detail__media img { max-width: 240px; width: 100%; height: auto; display:block }
+.monster-detail__title { margin: 0 0 .5rem }
+.back-link { display: inline-block; margin-bottom: .8rem }

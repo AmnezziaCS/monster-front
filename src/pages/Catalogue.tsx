@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import type { MonsterT } from "../types/Monsters";
+import type { components } from "../types/api-types";
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";
 
@@ -23,9 +23,9 @@ const Catalogue = ({ onTypeClick }: CatalogueProps) => {
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
 
-        const data: MonsterT[] = await response.json();
+  const data: components["schemas"]["MonsterDto"][] = await response.json();
 
-        const uniqueTypes = [...new Set(data.map((monster) => monster.type))];
+  const uniqueTypes = [...new Set(data.map((monster) => monster.type))];
         setTypes(uniqueTypes.sort());
       } catch (error) {
         console.error("Erreur de chargement :", error);

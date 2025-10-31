@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { MonsterT } from "../types/Monsters";
+import type { components } from "../types/api-types";
 import Monster from "../components/Monster";
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";
@@ -9,7 +9,7 @@ interface TypeMonstersProps {
 }
 
 const TypeMonsters = ({ type }: TypeMonstersProps) => {
-  const [monsters, setMonsters] = useState<MonsterT[]>([]);
+  const [monsters, setMonsters] = useState<components["schemas"]["MonsterDto"][]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,8 +30,8 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
 
-        const data: MonsterT[] = await response.json();
-        setMonsters(data);
+  const data: components["schemas"]["MonsterDto"][] = await response.json();
+  setMonsters(data as components["schemas"]["MonsterDto"][]);
       } catch (error) {
         console.error("Erreur de chargement :", error);
         setError(error instanceof Error ? error.message : "Erreur inconnue");
@@ -43,7 +43,7 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
   }, [type]);
 
   const monstersByType = useMemo(() => {
-    return monsters.reduce<Record<string, MonsterT[]>>((acc, item) => {
+    return monsters.reduce<Record<string, components["schemas"]["MonsterDto"][]>>((acc, item) => {
       const key = item.type;
       if (!acc[key]) acc[key] = [];
       acc[key].push(item);

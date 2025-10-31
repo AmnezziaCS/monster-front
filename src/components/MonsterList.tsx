@@ -1,5 +1,5 @@
 import { useLayoutEffect, useState } from "react";
-import type { MonsterT } from "../types/Monsters";
+import type { components } from "../types/api-types";
 import Monster from "./Monster";
 import "./MonsterList.css";
 
@@ -10,7 +10,7 @@ interface MonsterListProps {
 }
 
 const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
-  const [monsters, setMonsters] = useState<MonsterT[]>([]);
+  const [monsters, setMonsters] = useState<components["schemas"]["MonsterDto"][]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +26,7 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
         }
 
   const data: components["schemas"]["MonsterDto"][] = await response.json();
-        setMonsters(data);
+  setMonsters(data as components["schemas"]["MonsterDto"][]);
       } catch (error) {
         console.error("Erreur de chargement :", error);
         setError(error instanceof Error ? error.message : "Erreur inconnue");
