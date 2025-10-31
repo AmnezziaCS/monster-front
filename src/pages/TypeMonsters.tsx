@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { MonsterT } from "../types/Monsters";
 import Monster from "../components/Monster";
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 interface TypeMonstersProps {
-  type: string;
+  type?: string;
 }
 
 const TypeMonsters = ({ type }: TypeMonstersProps) => {
@@ -14,11 +14,17 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchMonstersByType = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`${API_URL}/monsters/type/${type}`);
+
+        const isAll = !type || type === "all";
+        const endpoint = isAll
+          ? `${API_URL}/monsters`
+          : `${API_URL}/monsters/type/${encodeURIComponent(type)}`;
+
+        const response = await fetch(endpoint);
 
         if (!response.ok) {
           throw new Error(`Erreur HTTP: ${response.status}`);
@@ -33,13 +39,26 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
         setLoading(false);
       }
     };
-    fetchMonstersByType();
+    fetchData();
   }, [type]);
+
+  const monstersByType = useMemo(() => {
+    return monsters.reduce<Record<string, MonsterT[]>>((acc, item) => {
+      const key = item.type;
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(item);
+      return acc;
+    }, {});
+  }, [monsters]);
 
   if (loading) {
     return (
       <div>
-        <h1>Monsters de type: {type}</h1>
+        <h1>
+          {type && type !== "all"
+            ? `Monsters de type: ${type}`
+            : "Tous les types"}
+        </h1>
         <p>Chargement des produits...</p>
       </div>
     );
@@ -48,21 +67,43 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
   if (error) {
     return (
       <div>
-        <h1>Monsters de type: {type}</h1>
+        <h1>
+          {type && type !== "all"
+            ? `Monsters de type: ${type}`
+            : "Tous les types"}
+        </h1>
         <p style={{ color: "red" }}>Erreur: {error}</p>
       </div>
     );
   }
 
+  const showGrouped = !type || type === "all";
+
   return (
     <div>
-      <h1>Monsters de type: {type}</h1>
-      <p>{monsters.length} produits trouvés</p>
-      <div>
-        {monsters.map((monster) => (
-          <Monster key={monster.id} monster={monster} />
-        ))}
-      </div>
+      <h1>{showGrouped ? "Tous les types" : `Monsters de type: ${type}`}</h1>
+      {!showGrouped && <p>{monsters.length} produits trouvés</p>}
+      {showGrouped ? (
+        <div>
+          {Object.entries(monstersByType).map(([groupType, group]) => (
+            <section key={groupType} style={{ marginBottom: 24 }}>
+              <h2>{groupType}</h2>
+              <p>{group.length} produits</p>
+              <div>
+                {group.map((monster) => (
+                  <Monster key={monster.id} monster={monster} />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      ) : (
+        <div>
+          {monsters.map((monster) => (
+            <Monster key={monster.id} monster={monster} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

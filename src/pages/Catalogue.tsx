@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import type { MonsterT } from "../types/Monsters";
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";
@@ -12,7 +12,7 @@ const Catalogue = ({ onTypeClick }: CatalogueProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchTypes = async () => {
       try {
         setLoading(true);
@@ -25,7 +25,6 @@ const Catalogue = ({ onTypeClick }: CatalogueProps) => {
 
         const data: MonsterT[] = await response.json();
 
-        // Extraire tous les types uniques
         const uniqueTypes = [...new Set(data.map((monster) => monster.type))];
         setTypes(uniqueTypes.sort());
       } catch (error) {
@@ -63,7 +62,15 @@ const Catalogue = ({ onTypeClick }: CatalogueProps) => {
       <ul>
         {types.map((type) => (
           <li key={type}>
-            <button onClick={() => onTypeClick?.(type)}>{type}</button>
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                onTypeClick?.(type);
+              }}
+            >
+              {type}
+            </a>
           </li>
         ))}
       </ul>

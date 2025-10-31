@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import type { MonsterT } from "../types/Monsters";
 import Monster from "./Monster";
 import "./MonsterList.css";
@@ -14,7 +14,7 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const fetchMonsters = async () => {
       try {
         setLoading(true);
