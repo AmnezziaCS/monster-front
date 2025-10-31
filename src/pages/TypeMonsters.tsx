@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { components } from "../types/api-types";
+import type { components } from "../types/api-types";
 import Monster from "../components/Monster";
 
 const API_URL = import.meta.env.VITE_API_URL || "/api";

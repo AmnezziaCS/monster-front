@@ -5,49 +5,55 @@ import MonsterList from './components/MonsterList'
 import { useState } from "react";
 import Catalogue from "./pages/Catalogue";
 import TypeMonsters from "./pages/TypeMonsters";
+import MonsterDetail from './pages/MonsterDetail'
+import Flavors from './pages/Flavors'
+import Contact from './pages/Contact'
+import { BrowserRouter, Routes, Route, useNavigate, useParams } from 'react-router-dom'
 
-function App() {
+function AppShell() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState("home");
-  const [selectedType, setSelectedType] = useState("");
+  const navigate = useNavigate();
 
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-  };
-
+  const handleSearch = (term: string) => setSearchTerm(term);
   const handleNavigate = (page: string) => {
-    setCurrentPage(page);
-    setSearchTerm(""); 
+    switch (page) {
+      case 'home': return navigate('/');
+      case 'catalogue': return navigate('/catalog');
+      default: return navigate('/');
+    }
   };
 
   const handleTypeClick = (type: string) => {
-    setSelectedType(type);
-    setCurrentPage("type");
-  };
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case "catalogue":
-        return <Catalogue onTypeClick={handleTypeClick} />;
-      case "type":
-        return <TypeMonsters type={selectedType} />;
-      default:
-        return (
-          <div>
-            <h1 className="page-title">Catalogue Monster</h1>
-            <MonsterList searchTerm={searchTerm} />
-          </div>
-        );
-    }
+    navigate(`/type/${encodeURIComponent(type)}`);
   };
 
   return (
     <div className="app-shell">
       <Header onSearch={handleSearch} onNavigate={handleNavigate} />
-      <main className="container main">{renderPage()}</main>
+      <main className="container main">
+        <Routes>
+          <Route path="/" element={<div><h1 className="page-title">Catalogue Monster</h1><MonsterList searchTerm={searchTerm} /></div>} />
+          <Route path="/catalog" element={<Catalogue onTypeClick={handleTypeClick} />} />
+          <Route path="/flavors" element={<Flavors />} />
+          <Route path="/type/:type" element={<TypeRoute />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/:id" element={<MonsterDetail/>} />
+        </Routes>
+      </main>
       <Footer />
     </div>
   );
 }
 
-export default App
+function TypeRoute() {
+  const { type } = useParams();
+  return <TypeMonsters type={type} />;
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppShell />
+    </BrowserRouter>
+  );
+}
