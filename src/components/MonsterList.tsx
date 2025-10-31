@@ -25,7 +25,7 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
 
-        const data: MonsterT[] = await response.json();
+  const data: components["schemas"]["MonsterDto"][] = await response.json();
         setMonsters(data);
       } catch (error) {
         console.error("Erreur de chargement :", error);

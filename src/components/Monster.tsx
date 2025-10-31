@@ -1,8 +1,8 @@
-import type { MonsterT as MonsterType } from "../types/Monsters";
+import type { components } from "../types/api-types";
 import './Monster.css'
 
 interface MonsterProps {
-  monster: MonsterType;
+  monster: components["schemas"]["MonsterDto"];
 }
 
 const Monster = ({ monster }: MonsterProps) => {
