@@ -7,17 +7,19 @@ interface MonsterProps {
 
 const Monster = ({ monster }: MonsterProps) => {
   return (
-    <article className="monster">
-      <div className="monster__media">
+    <article className="monster" aria-labelledby={`monster-${monster.id}-title`}>
+      <figure className="monster__media">
         <img src={monster.imageUrl} alt={monster.name} />
-      </div>
+      </figure>
       <div className="monster__body">
-        <h3 className="monster__title">{monster.name}</h3>
+        <header>
+          <h3 id={`monster-${monster.id}-title`} className="monster__title">{monster.name}</h3>
+        </header>
         <p className="monster__desc">{monster.description}</p>
-        <div className="monster__meta">
+        <footer className="monster__meta">
           <span className="monster__price">{monster.price} €</span>
           <span className="monster__type">{monster.type}</span>
-        </div>
+        </footer>
       </div>
     </article>
   );

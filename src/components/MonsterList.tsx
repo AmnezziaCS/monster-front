@@ -35,32 +35,34 @@ const MonsterList = () => {
 
   if (loading) {
     return (
-      <div>
-        <h1 className="monster-list__title">Liste des Monster Energy</h1>
+      <section aria-busy="true" aria-labelledby="monsters-heading">
+        <h2 id="monsters-heading" className="monster-list__title">Liste des Monster Energy</h2>
         <p>Chargement des produits...</p>
-      </div>
+      </section>
     );
   }
 
   if (error) {
     return (
-      <div>
-        <h1 className="monster-list__title">Liste des Monster Energy</h1>
-        <p style={{ color: "red" }}>Erreur: {error}</p>
+      <section aria-labelledby="monsters-heading">
+        <h2 id="monsters-heading" className="monster-list__title">Liste des Monster Energy</h2>
+        <p role="alert" style={{ color: "red" }}>Erreur: {error}</p>
         <p>Vérifiez que le backend est démarré sur le port 3000</p>
-      </div>
+      </section>
     );
   }
 
   return (
-    <div className="monster-list__wrap">
-      <h1 className="monster-list__title">Liste des Monster Energy ({monsters.length} produits)</h1>
-      <div className="monster-list__grid">
+    <section className="monster-list__wrap" aria-labelledby="monsters-heading">
+      <h2 id="monsters-heading" className="monster-list__title">Liste des Monster Energy ({monsters.length} produits)</h2>
+      <ul className="monster-list__grid" role="list">
         {monsters.map((monster) => (
-          <Monster key={monster.id} monster={monster} />
+          <li key={monster.id}>
+            <Monster monster={monster} />
+          </li>
         ))}
-      </div>
-    </div>
+      </ul>
+    </section>
   );
 };
 

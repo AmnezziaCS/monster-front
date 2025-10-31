@@ -6,32 +6,32 @@ const Footer: React.FC = () => {
   return (
     <footer className="footer">
       <div className="container footer__grid">
-        <div>
-          <h4 className="footer__title">À propos</h4>
+        <section aria-labelledby="footer-about">
+          <h4 id="footer-about" className="footer__title">À propos</h4>
           <p className="footer__text">Catalogue Officiel de Monster Front.</p>
-        </div>
-        <div>
-          <h4 className="footer__title">Liens</h4>
+        </section>
+        <nav aria-labelledby="footer-links" className="footer__nav">
+          <h4 id="footer-links" className="footer__title">Liens</h4>
           <ul className="footer__list">
-            <li><a className="footer__link" href="#">Accueil</a></li>
-            <li><a className="footer__link" href="#">Catalogue</a></li>
-            <li><a className="footer__link" href="#">Saveurs</a></li>
-            <li><a className="footer__link" href="#">Contact</a></li>
+            <li><a className="footer__link" href="/">Accueil</a></li>
+            <li><a className="footer__link" href="/catalog">Catalogue</a></li>
+            <li><a className="footer__link" href="/flavors">Saveurs</a></li>
+            <li><a className="footer__link" href="/contact">Contact</a></li>
           </ul>
-        </div>
-        <div>
-          <h4 className="footer__title">Suivre</h4>
+        </nav>
+        <nav aria-labelledby="footer-follow" className="footer__nav">
+          <h4 id="footer-follow" className="footer__title">Suivre</h4>
           <ul className="footer__list">
             <li><a className="footer__link" href="#">Instagram</a></li>
             <li><a className="footer__link" href="#">X / Twitter</a></li>
             <li><a className="footer__link" href="#">YouTube</a></li>
           </ul>
-        </div>
+        </nav>
       </div>
       <div className="footer__bottom">
         <div className="container footer__bottomInner">
-          <span>© {year} Monster Catalog</span>
-          <span className="muted">Projet personnel · sûrement pas affilié à Monster Energy (Vous inquiétez pas)</span>
+          <small>© {year} Monster Catalog</small>
+          <small className="muted">Projet personnel · sûrement pas affilié à Monster Energy (Vous inquiétez pas)</small>
         </div>
       </div>
     </footer>
