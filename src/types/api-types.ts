@@ -43,7 +43,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["MonsterController_getMonstersByType"];
+        get: operations["MonsterController_getAllMonstersFromType"];
         put?: never;
         post?: never;
         delete?: never;
@@ -66,7 +66,7 @@ export interface components {
              * @example Ultra
              * @enum {string}
              */
-            type: "Energy" | "Ultra" | "Java" | "Punch" | "Rehab" | "MAXX" | "X-Presso" | "Dragon Tea" | "Espresso" | "Muscle" | "Hydro";
+            type: "Energy" | "Ultra" | "Java" | "Juice" | "Punch" | "Rehab" | "MAXX" | "X-Presso" | "Dragon Tea" | "Espresso" | "Muscle" | "Hydro";
             /** @example The monster ultra white is a refreshing energy drink with a crisp taste. */
             description: string;
             /** @example 2.99 */
@@ -85,7 +85,16 @@ export type $defs = Record<string, never>;
 export interface operations {
     MonsterController_getAllMonsters: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description Filter monsters by type. */
+                type?: "Energy" | "Ultra" | "Java" | "Juice" | "Punch" | "Rehab" | "MAXX" | "X-Presso" | "Dragon Tea" | "Espresso" | "Muscle" | "Hydro";
+                /** @description Filter monsters by partial name match (case-insensitive). */
+                name?: string;
+                /** @description Minimum price required (filters out cheaper products). */
+                minPrice?: number;
+                /** @description Maximum price allowed (filters out more expensive products). */
+                maxPrice?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -123,13 +132,13 @@ export interface operations {
             };
         };
     };
-    MonsterController_getMonstersByType: {
+    MonsterController_getAllMonstersFromType: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                /** @description The Monster product type (e.g., Ultra, Punch, Energy). */
-                type: "Energy" | "Ultra" | "Java" | "Punch" | "Rehab" | "MAXX" | "X-Presso" | "Dragon Tea" | "Espresso" | "Muscle" | "Hydro";
+                /** @description Monster product type (e.g., Ultra, Punch, Energy). */
+                type: "Energy" | "Ultra" | "Java" | "Juice" | "Punch" | "Rehab" | "MAXX" | "X-Presso" | "Dragon Tea" | "Espresso" | "Muscle" | "Hydro";
             };
             cookie?: never;
         };
