@@ -1,10 +1,8 @@
 import { useLayoutEffect, useState } from 'react';
 
-import type { MonsterType } from '../types/front-types';
+import { API_URL, type MonsterType } from '../types/front-types';
 import Monster from './Monster';
 import './MonsterList.css';
-
-const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 interface MonsterListProps {
     searchTerm?: string;

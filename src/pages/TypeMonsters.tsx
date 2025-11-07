@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import Monster from '../components/Monster';
-import type { MonsterType } from '../types/front-types';
-
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+import { API_URL, type MonsterType } from '../types/front-types';
 
 interface TypeMonstersProps {
     type?: string;

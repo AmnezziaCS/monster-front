@@ -1,8 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 
-import type { MonsterType } from '../types/front-types';
-
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+import { API_URL, type MonsterType } from '../types/front-types';
 
 interface CatalogueProps {
     onTypeClick?: (type: string) => void;
