@@ -10,10 +10,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import "./App.css";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import MonsterList from "./components/MonsterList";
+import PriceSlider from './components/PriceSlider'
 import Catalogue from "./pages/Catalogue";
 import TypeMonsters from "./pages/TypeMonsters";
 import MonsterDetail from "./pages/MonsterDetail";
@@ -23,8 +20,6 @@ import useDebounce from "./hooks/useDebounce";
 
 function AppShell() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
-  const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
   const navigate = useNavigate();
 
   const debouncedSetSearchTerm = useDebounce((value: string) => {
@@ -52,9 +47,10 @@ function AppShell() {
 
   const [sliderMin, setSliderMin] = useState(0)
   const [sliderMax, setSliderMax] = useState(10)
+  const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
+  const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
 
   const handlePriceChange = (min: number, max: number) => {
-    // when user interacts, set min/max to numbers so MonsterList will query backend
     setSliderMin(min)
     setSliderMax(max)
     setMinPrice(min)
@@ -66,7 +62,7 @@ function AppShell() {
       <Header onSearch={handleSearch} onNavigate={handleNavigate} />
       <main className="container main">
         <Routes>
-          <Route path="/" element={<div><h1 className="page-title">Catalogue Monster</h1><MonsterList searchTerm={searchTerm} /></div>} />
+          <Route path="/" element={<div><h1 className="page-title">Catalogue Monster</h1><PriceSlider min={0} max={10} valueMin={sliderMin} valueMax={sliderMax} onChange={handlePriceChange} /><MonsterList searchTerm={searchTerm} minPrice={minPrice} maxPrice={maxPrice} /></div>} />
           <Route path="/catalog" element={<Catalogue onTypeClick={handleTypeClick} />} />
           <Route path="/flavors" element={<Flavors />} />
           <Route path="/type/:type" element={<TypeRoute />} />
