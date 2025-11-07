@@ -7,9 +7,11 @@ const API_URL = import.meta.env.VITE_API_URL || "/api";
 
 interface MonsterListProps {
   searchTerm?: string;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
-const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
+const MonsterList = ({ searchTerm = "", minPrice, maxPrice }: MonsterListProps) => {
   const [monsters, setMonsters] = useState<components["schemas"]["MonsterDto"][]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,18 +21,43 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
       try {
         setLoading(true);
         setError(null);
-        const params = new URLSearchParams();
+  const params = new URLSearchParams();
         const trimmed = searchTerm.trim();
         if (trimmed) params.set("name", trimmed);
-        const url = `${API_URL}/monsters${params.toString() ? `?${params.toString()}` : ""}`;
-        const response = await fetch(url);
+  if (typeof minPrice === 'number') params.set('minPrice', String(minPrice));
+  if (typeof maxPrice === 'number') params.set('maxPrice', String(maxPrice));
+  const url = `${API_URL}/monsters${params.toString() ? `?${params.toString()}` : ""}`;
 
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP: ${response.status}`);
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+          const data: components["schemas"]["MonsterDto"][] = await response.json();
+
+          const withPriceFilter = data.filter((m) => {
+            const price = typeof m.price === 'number' ? m.price : Number(m.price);
+            if (typeof minPrice === 'number' && price < minPrice) return false;
+            if (typeof maxPrice === 'number' && price > maxPrice) return false;
+            return true;
+          });
+
+          setMonsters(withPriceFilter);
+        } catch (backendErr) {
+          console.warn('Backend fetch failed, using local monsters.json fallback', backendErr);
+          try {
+            const local = await fetch('/monsters.json');
+            if (!local.ok) throw new Error('Local fallback not available');
+            const data: components["schemas"]["MonsterDto"][] = await local.json();
+            const withPriceFilter = data.filter((m) => {
+              const price = typeof m.price === 'number' ? m.price : Number(m.price);
+              if (typeof minPrice === 'number' && price < minPrice) return false;
+              if (typeof maxPrice === 'number' && price > maxPrice) return false;
+              return true;
+            });
+            setMonsters(withPriceFilter);
+          } catch {
+            throw backendErr;
+          }
         }
-
-	const data: components["schemas"]["MonsterDto"][] = await response.json();
-        setMonsters(data);
       } catch (error) {
         console.error("Erreur de chargement :", error);
         setError(error instanceof Error ? error.message : "Erreur inconnue");
@@ -39,7 +66,7 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
       }
     };
     fetchMonsters();
-  }, [searchTerm]);
+  }, [searchTerm, minPrice, maxPrice]);
 
   if (loading) {
     return (
@@ -59,9 +86,12 @@ const MonsterList = ({ searchTerm = "" }: MonsterListProps) => {
   }
 
   const filteredMonsters = monsters.filter((monster) => {
-    if (!searchTerm.trim()) return true;
-    const searchLower = searchTerm.toLowerCase();
-    return monster.type.toLowerCase().includes(searchLower) || true;
+    const trimmed = searchTerm.trim();
+    if (!trimmed) return true;
+    const searchLower = trimmed.toLowerCase();
+    const name = (monster.name || '').toString().toLowerCase();
+    const type = (monster.type || '').toString().toLowerCase();
+    return name.includes(searchLower) || type.includes(searchLower);
   });
 
   return (

@@ -16,7 +16,6 @@ const Footer: React.FC = () => {
             <ul className="footer__list">
               <li><Link className="footer__link" to="/">Accueil</Link></li>
               <li><Link className="footer__link" to="/catalog">Catalogue</Link></li>
-
               <li><Link className="footer__link" to="/contact">Contact</Link></li>
             </ul>
           </nav>
