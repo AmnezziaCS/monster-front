@@ -17,6 +17,34 @@
 .footer__link { color: var(--text); }
 .footer__link:hover { color: var(--brand); }
 
+.footer__link--cta {
+  display: inline-block;
+  padding: .35rem .6rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.footer__link--cta:hover {
+  background: rgba(16,185,129,0.08);
+  color: var(--brand);
+  border-color: rgba(16,185,129,0.16);
+}
+
+.footer__link--cta {
+  display: inline-block;
+  padding: .35rem .6rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.footer__link--cta:hover {
+  background: rgba(16,185,129,0.08);
+  color: var(--brand);
+  border-color: rgba(16,185,129,0.16);
+}
+
 .footer__socialList { display:flex; gap: .5rem; align-items:center; padding:0; }
 .footer__social { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:6px; background:transparent; color:var(--text); text-decoration:none; }
 .footer__social:hover { background: rgba(0,0,0,0.04); color: var(--brand); }

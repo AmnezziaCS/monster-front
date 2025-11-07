@@ -48,6 +48,18 @@
   color: var(--brand);
 }
 
+.nav__link--contact {
+  border: 1px solid transparent;
+  padding: .4rem .8rem;
+  background: transparent;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.nav__link--contact:hover {
+  background: rgba(16,185,129,0.08); 
+  color: var(--brand);
+  border-color: rgba(16,185,129,0.16);
+}
+
 .search { display: none; }
 @media (min-width: 900px) {
   .search { display: block; }

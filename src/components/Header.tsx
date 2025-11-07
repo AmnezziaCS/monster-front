@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./Header.css";
 
 interface HeaderProps {
@@ -39,22 +40,24 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onNavigate }) => {
         </a>
 
         <nav id="primary-nav" className="nav" aria-label="Primary">
-          <a
-            href="#"
+          <Link
+            to="/catalog"
             className="nav__link"
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={() => {
               onNavigate?.("catalogue");
+              setOpen(false);
             }}
           >
             Catalogue
-          </a>
-          <a href="#" className="nav__link" onClick={(e) => e.preventDefault()}>
-            Saveurs
-          </a>
-          <a href="#" className="nav__link" onClick={(e) => e.preventDefault()}>
+          </Link>
+
+          <Link
+            to="/contact"
+            className="nav__link nav__link--contact"
+            onClick={() => setOpen(false)}
+          >
             Contact
-          </a>
+          </Link>
         </nav>
 
         <form className="search" role="search" aria-label="Recherche">
