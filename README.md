@@ -68,3 +68,15 @@ npm run dev
 * Detailed product information pages
 * Integration with HoudiMonster Backend API
 * Strong typing and type-safe API consumption
+
+## Test 
+
+```Install 
+npx puppeteer browsers install chrome
+```
+
+
+```Lancer 
+npm run test:e2e:ui
+```
+
