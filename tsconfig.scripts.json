@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "outDir": "dist-scripts",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["scripts/**/*.ts"]
+}

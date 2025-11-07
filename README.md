@@ -35,6 +35,20 @@ The generated API types are located at:
 
 ## Installation
 
+### Add .env.local File
+
+Create a `.env.local` file in the root directory with the following content:
+
+```env
+BACKEND_PATH="C:\Users\example\Documents\monster-back"
+```
+
+The link should be an absolute path to your local HoudiMonster Backend repository.
+
+⚠️ Make sure the backend is pulled at its latest commit for the frontend to be up to date.
+
+### Install Dependencies
+
 ```bash
 npm install
 ```

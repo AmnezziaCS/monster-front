@@ -4,13 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "npx ts-node --project tsconfig.scripts.json scripts/update-api-types.ts",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "prepare": "husky install"
+    "preview": "vite preview"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "primereact": "^10.9.7",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -18,7 +19,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
-    "@types/node": "^24.6.0",
+    "@types/node": "^24.10.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react-swc": "^4.1.0",
@@ -26,7 +27,6 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
-    "husky": "^8.0.3",
     "openapi-typescript": "^7.10.1",
     "rimraf": "^6.0.1",
     "typescript": "~5.9.3",
