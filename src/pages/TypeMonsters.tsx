@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import Monster from '../components/Monster';
-import { API_URL, type MonsterType } from '../types/front-types';
+import MonsterCard from '../components/Monster';
+import { API_URL, type Monster } from '../types/front-types';
 
 interface TypeMonstersProps {
     type?: string;
 }
 
 const TypeMonsters = ({ type }: TypeMonstersProps) => {
-    const [monsters, setMonsters] = useState<MonsterType[]>([]);
+    const [monsters, setMonsters] = useState<Monster[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -29,7 +29,7 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
                     throw new Error(`Erreur HTTP: ${response.status}`);
                 }
 
-                const data: MonsterType[] = await response.json();
+                const data: Monster[] = await response.json();
                 setMonsters(data);
             } catch (error) {
                 console.error('Erreur de chargement :', error);
@@ -44,7 +44,7 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
     }, [type]);
 
     const monstersByType = useMemo(() => {
-        return monsters.reduce<Record<string, MonsterType[]>>((acc, item) => {
+        return monsters.reduce<Record<string, Monster[]>>((acc, item) => {
             const key = item.type;
             if (!acc[key]) acc[key] = [];
             acc[key].push(item);
@@ -98,7 +98,7 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
                                 <p>{group.length} produits</p>
                                 <div>
                                     {group.map((monster) => (
-                                        <Monster
+                                        <MonsterCard
                                             key={monster.id}
                                             monster={monster}
                                         />
@@ -111,7 +111,7 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
             ) : (
                 <div>
                     {monsters.map((monster) => (
-                        <Monster key={monster.id} monster={monster} />
+                        <MonsterCard key={monster.id} monster={monster} />
                     ))}
                 </div>
             )}

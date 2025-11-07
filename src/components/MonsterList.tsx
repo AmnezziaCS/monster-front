@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from 'react';
 
-import { API_URL, type MonsterType } from '../types/front-types';
-import Monster from './Monster';
+import { API_URL, type Monster } from '../types/front-types';
+import MonsterCard from './Monster';
 import './MonsterList.css';
 
 interface MonsterListProps {
@@ -15,7 +15,7 @@ const MonsterList = ({
     minPrice,
     maxPrice,
 }: MonsterListProps) => {
-    const [monsters, setMonsters] = useState<MonsterType[]>([]);
+    const [monsters, setMonsters] = useState<Monster[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -37,7 +37,7 @@ const MonsterList = ({
                     const response = await fetch(url);
                     if (!response.ok)
                         throw new Error(`Erreur HTTP: ${response.status}`);
-                    const data: MonsterType[] = await response.json();
+                    const data: Monster[] = await response.json();
 
                     const withPriceFilter = data.filter((m) => {
                         const price =
@@ -61,7 +61,7 @@ const MonsterList = ({
                         const local = await fetch('/monsters.json');
                         if (!local.ok)
                             throw new Error('Local fallback not available');
-                        const data: MonsterType[] = await local.json();
+                        const data: Monster[] = await local.json();
                         const withPriceFilter = data.filter((m) => {
                             const price =
                                 typeof m.price === 'number'
@@ -126,7 +126,7 @@ const MonsterList = ({
         <div className="monster-list__wrap">
             <div className="monster-list__grid">
                 {filteredMonsters.map((monster) => (
-                    <Monster key={monster.id} monster={monster} />
+                    <MonsterCard key={monster.id} monster={monster} />
                 ))}
             </div>
             {searchTerm && filteredMonsters.length === 0 && (

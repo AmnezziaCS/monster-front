@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { API_URL, type MonsterType } from '../types/front-types';
+import { API_URL, type Monster } from '../types/front-types';
 
 const Flavors = () => {
     const [types, setTypes] = useState<string[]>([]);
@@ -14,7 +14,7 @@ const Flavors = () => {
                 setLoading(true);
                 const res = await fetch(`${API_URL}/monsters`);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data: MonsterType[] = await res.json();
+                const data: Monster[] = await res.json();
                 const unique = Array.from(
                     new Set(data.map((d) => d.type)),
                 ).sort();

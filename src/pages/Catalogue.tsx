@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from 'react';
 
-import { API_URL, type MonsterType } from '../types/front-types';
+import { API_URL, type Monster } from '../types/front-types';
 
 interface CatalogueProps {
     onTypeClick?: (type: string) => void;
@@ -22,7 +22,7 @@ const Catalogue = ({ onTypeClick }: CatalogueProps) => {
                     throw new Error(`Erreur HTTP: ${response.status}`);
                 }
 
-                const data: MonsterType[] = await response.json();
+                const data: Monster[] = await response.json();
 
                 const uniqueTypes = [
                     ...new Set(data.map((monster) => monster.type)),

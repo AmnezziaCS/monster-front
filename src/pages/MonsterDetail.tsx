@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { API_CONFIG } from '../config/api';
-import { API_URL, type MonsterType } from '../types/front-types';
+import { API_URL, type Monster } from '../types/front-types';
 import './MonsterDetail.css';
 
 const MonsterDetail = () => {
     const { id } = useParams();
 
-    const [monster, setMonster] = useState<MonsterType | null>(null);
+    const [monster, setMonster] = useState<Monster | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -27,7 +27,7 @@ const MonsterDetail = () => {
                 const res = await fetch(url);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-                const data: MonsterType = await res.json();
+                const data: Monster = await res.json();
                 setMonster(data);
             } catch (e) {
                 setError(e instanceof Error ? e.message : 'Erreur inconnue');

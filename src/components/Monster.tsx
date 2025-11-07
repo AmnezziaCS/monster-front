@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 
-import type { MonsterType } from '../types/front-types';
+import type { Monster } from '../types/front-types';
 import './Monster.css';
 
 interface MonsterProps {
-    monster: MonsterType;
+    monster: Monster;
 }
 
-const Monster = ({ monster }: MonsterProps) => {
+const MonsterCard = ({ monster }: MonsterProps) => {
     return (
         <article
             className="monster"
@@ -37,4 +37,4 @@ const Monster = ({ monster }: MonsterProps) => {
     );
 };
 
-export default Monster;
+export default MonsterCard;
