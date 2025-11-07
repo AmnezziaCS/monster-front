@@ -120,3 +120,28 @@ export async function clearInput(page, selector) {
   }, selector);
 }
 
+export async function clickByText(page, selector, text) {
+  const handle = await page.evaluateHandle(
+    (sel, txt) => {
+      const elements = Array.from(document.querySelectorAll(sel));
+      return (
+        elements.find(
+          (el) => el.textContent && el.textContent.trim().includes(txt)
+        ) || null
+      );
+    },
+    selector,
+    text
+  );
+  if (handle) {
+    const element = handle.asElement();
+    if (element) {
+      await element.click();
+      await handle.dispose();
+      return true;
+    }
+  }
+  await handle.dispose();
+  return false;
+}
+
