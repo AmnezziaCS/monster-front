@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     BrowserRouter,
     Route,
@@ -48,8 +48,81 @@ function AppShell() {
 
     const [sliderMin, setSliderMin] = useState(0);
     const [sliderMax, setSliderMax] = useState(10);
+    const [boundsMin, setBoundsMin] = useState(0);
+    const [boundsMax, setBoundsMax] = useState(10);
     const [minPrice, setMinPrice] = useState<number | undefined>(undefined);
     const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
+
+    useEffect(() => {
+        const API_URL = import.meta.env.VITE_API_URL || '/api';
+        const fetchRange = async () => {
+            try {
+                const tryEndpoints = [
+                    `${API_URL}/monsters/price-range`,
+                    `${API_URL}/monsters`,
+                    '/monsters.json',
+                ];
+
+                for (const url of tryEndpoints) {
+                    try {
+                        const res = await fetch(url);
+                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                        const data = await res.json();
+
+                        if (
+                            data &&
+                            (typeof data.min === 'number' ||
+                                typeof data.minPrice === 'number')
+                        ) {
+                            const min =
+                                typeof data.min === 'number'
+                                    ? data.min
+                                    : data.minPrice;
+                            const max =
+                                typeof data.max === 'number'
+                                    ? data.max
+                                    : data.maxPrice;
+                            setBoundsMin(min ?? 0);
+                            setBoundsMax(max ?? 10);
+                            setSliderMin(min ?? 0);
+                            setSliderMax(max ?? 10);
+                            setMinPrice(min ?? 0);
+                            setMaxPrice(max ?? 10);
+                            return;
+                        }
+
+                        if (Array.isArray(data)) {
+                            const prices = data
+                                .map((m: Record<string, unknown>) => {
+                                    const p = m.price as unknown;
+                                    return typeof p === 'number'
+                                        ? p
+                                        : Number(String(p));
+                                })
+                                .filter((p: number) => Number.isFinite(p));
+                            if (prices.length > 0) {
+                                const min = Math.min(...prices);
+                                const max = Math.max(...prices);
+                                setBoundsMin(min);
+                                setBoundsMax(max);
+                                setSliderMin(min);
+                                setSliderMax(max);
+                                setMinPrice(min);
+                                setMaxPrice(max);
+                                return;
+                            }
+                        }
+                    } catch {
+                        // try next endpoint
+                        // console.warn('Range fetch failed for', url, e);
+                    }
+                }
+            } catch {
+                // ignore - keep defaults
+            }
+        };
+        fetchRange();
+    }, []);
 
     const handlePriceChange = (min: number, max: number) => {
         setSliderMin(min);
@@ -71,8 +144,8 @@ function AppShell() {
                                     Catalogue Monster
                                 </h1>
                                 <PriceSlider
-                                    min={0}
-                                    max={10}
+                                    min={boundsMin}
+                                    max={boundsMax}
                                     valueMin={sliderMin}
                                     valueMax={sliderMax}
                                     onChange={handlePriceChange}
@@ -100,15 +173,15 @@ function AppShell() {
     );
 }
 
-function TypeRoute() {
-    const { type } = useParams();
-    return <TypeMonsters type={type} />;
-}
-
 export default function App() {
     return (
         <BrowserRouter>
             <AppShell />
         </BrowserRouter>
     );
+}
+
+function TypeRoute() {
+    const { type } = useParams();
+    return <TypeMonsters type={type} />;
 }

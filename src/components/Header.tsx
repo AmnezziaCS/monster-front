@@ -13,32 +13,28 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onNavigate }) => {
     return (
         <header className={`header${open ? ' is-open' : ''}`}>
             <div className="container header__inner">
-                <a
-                    href="#"
+                <Link
+                    to="/"
                     className="brand"
                     aria-label="Monster Energy Home"
                     onClick={() => onNavigate?.('home')}
                 >
                     <span className="brand__mark" />
                     <span className="brand__text">Monster Front</span>
-                </a>
+                </Link>
 
-                <a
-                    href="#"
+                <button
+                    type="button"
                     className={`menu-btn${open ? ' menu-btn--active' : ''}`}
                     aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
                     aria-controls="primary-nav"
                     aria-expanded={open}
-                    role="button"
-                    onClick={(e) => {
-                        e.preventDefault();
-                        setOpen((v) => !v);
-                    }}
+                    onClick={() => setOpen((v) => !v)}
                 >
                     <span className="menu-btn__bar" />
                     <span className="menu-btn__bar" />
                     <span className="menu-btn__bar" />
-                </a>
+                </button>
 
                 <nav id="primary-nav" className="nav" aria-label="Primary">
                     <Link

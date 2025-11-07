@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { API_URL, type Monster } from '../types/front-types';
 
@@ -65,15 +66,12 @@ const Catalogue = ({ onTypeClick }: CatalogueProps) => {
             <ul>
                 {types.map((type) => (
                     <li key={type}>
-                        <a
-                            href="#"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                onTypeClick?.(type);
-                            }}
+                        <Link
+                            to={`/type/${encodeURIComponent(type)}`}
+                            onClick={() => onTypeClick?.(type)}
                         >
                             {type}
-                        </a>
+                        </Link>
                     </li>
                 ))}
             </ul>
