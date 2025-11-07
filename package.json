@@ -10,8 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test:e2e": "node e2e/puppeteer.spec.js",
-    "test:e2e:ui": "HEADLESS=false SLOWMO=100 node e2e/puppeteer.spec.js",
-    "prepare": "husky install"
+    "test:e2e:ui": "HEADLESS=false SLOWMO=100 node e2e/puppeteer.spec.js"
   },
   "dependencies": {
     "dotenv": "^17.2.3",
