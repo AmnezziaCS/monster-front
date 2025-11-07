@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import './Header.css'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import './Header.css';
 
 interface HeaderProps {
-    onSearch?: (searchTerm: string) => void
-    onNavigate?: (page: string) => void
+    onSearch?: (searchTerm: string) => void;
+    onNavigate?: (page: string) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ onSearch, onNavigate }) => {
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
     return (
         <header className={`header${open ? ' is-open' : ''}`}>
             <div className="container header__inner">
@@ -30,8 +31,8 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onNavigate }) => {
                     aria-expanded={open}
                     role="button"
                     onClick={(e) => {
-                        e.preventDefault()
-                        setOpen((v) => !v)
+                        e.preventDefault();
+                        setOpen((v) => !v);
                     }}
                 >
                     <span className="menu-btn__bar" />
@@ -44,8 +45,8 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onNavigate }) => {
                         to="/catalog"
                         className="nav__link"
                         onClick={() => {
-                            onNavigate?.('catalogue')
-                            setOpen(false)
+                            onNavigate?.('catalogue');
+                            setOpen(false);
                         }}
                     >
                         Catalogue
@@ -67,13 +68,13 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onNavigate }) => {
                         placeholder="Rechercher une canette..."
                         aria-label="Rechercher"
                         onChange={(e) => {
-                            onSearch?.(e.target.value)
+                            onSearch?.(e.target.value);
                         }}
                     />
                 </form>
             </div>
         </header>
-    )
-}
+    );
+};
 
-export default Header
+export default Header;

@@ -1,13 +1,14 @@
-import React from 'react'
-import './PriceSlider.css'
+import React from 'react';
+
+import './PriceSlider.css';
 
 interface PriceSliderProps {
-    min: number
-    max: number
-    valueMin: number
-    valueMax: number
-    step?: number
-    onChange: (min: number, max: number) => void
+    min: number;
+    max: number;
+    valueMin: number;
+    valueMax: number;
+    step?: number;
+    onChange: (min: number, max: number) => void;
 }
 
 const PriceSlider: React.FC<PriceSliderProps> = ({
@@ -19,13 +20,13 @@ const PriceSlider: React.FC<PriceSliderProps> = ({
     onChange,
 }) => {
     const handleMin = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const v = Math.min(Number(e.target.value), valueMax)
-        onChange(Number(v.toFixed(2)), valueMax)
-    }
+        const v = Math.min(Number(e.target.value), valueMax);
+        onChange(Number(v.toFixed(2)), valueMax);
+    };
     const handleMax = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const v = Math.max(Number(e.target.value), valueMin)
-        onChange(valueMin, Number(v.toFixed(2)))
-    }
+        const v = Math.max(Number(e.target.value), valueMin);
+        onChange(valueMin, Number(v.toFixed(2)));
+    };
     return (
         <div className="price-slider card">
             <div className="price-slider__row">
@@ -58,7 +59,7 @@ const PriceSlider: React.FC<PriceSliderProps> = ({
                 />
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default PriceSlider
+export default PriceSlider;

@@ -1,30 +1,30 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react';
 
 const useDebounce = (callback: (value: string) => void, delay: number) => {
     const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(
-        null
-    )
+        null,
+    );
 
     useEffect(() => {
         return () => {
             if (timer) {
-                clearTimeout(timer)
+                clearTimeout(timer);
             }
-        }
-    }, [timer])
+        };
+    }, [timer]);
 
     return useCallback(
         (value: string) => {
             if (timer) {
-                clearTimeout(timer)
+                clearTimeout(timer);
             }
             const newTimer = setTimeout(() => {
-                callback(value)
-            }, delay)
-            setTimer(newTimer)
+                callback(value);
+            }, delay);
+            setTimer(newTimer);
         },
-        [callback, delay, timer]
-    )
-}
+        [callback, delay, timer],
+    );
+};
 
-export default useDebounce
+export default useDebounce;

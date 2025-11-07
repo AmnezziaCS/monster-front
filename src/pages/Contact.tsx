@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import './Contact.css'
+import { useState } from 'react';
+
+import './Contact.css';
 
 const Contact = () => {
-    const [sent, setSent] = useState(false)
+    const [sent, setSent] = useState(false);
     return (
         <main className="container contact">
             <h1>Contact</h1>
@@ -14,8 +15,8 @@ const Contact = () => {
                 <form
                     className="contact__form"
                     onSubmit={(e) => {
-                        e.preventDefault()
-                        setSent(true)
+                        e.preventDefault();
+                        setSent(true);
                     }}
                 >
                     <div className="contact__row">
@@ -47,7 +48,7 @@ const Contact = () => {
                 </form>
             )}
         </main>
-    )
-}
+    );
+};
 
-export default Contact
+export default Contact;

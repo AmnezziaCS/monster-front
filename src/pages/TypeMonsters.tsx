@@ -1,62 +1,58 @@
-import { useEffect, useMemo, useState } from 'react'
-import type { components } from '../types/api-types'
-import Monster from '../components/Monster'
+import { useEffect, useMemo, useState } from 'react';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api'
+import Monster from '../components/Monster';
+import type { MonsterType } from '../types/front-types';
+
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 interface TypeMonstersProps {
-    type?: string
+    type?: string;
 }
 
 const TypeMonsters = ({ type }: TypeMonstersProps) => {
-    const [monsters, setMonsters] = useState<
-        components['schemas']['MonsterDto'][]
-    >([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+    const [monsters, setMonsters] = useState<MonsterType[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                setLoading(true)
-                setError(null)
+                setLoading(true);
+                setError(null);
 
-                const isAll = !type || type === 'all'
+                const isAll = !type || type === 'all';
                 const endpoint = isAll
                     ? `${API_URL}/monsters`
-                    : `${API_URL}/monsters?${new URLSearchParams({ type: String(type) }).toString()}`
+                    : `${API_URL}/monsters?${new URLSearchParams({ type: String(type) }).toString()}`;
 
-                const response = await fetch(endpoint)
+                const response = await fetch(endpoint);
 
                 if (!response.ok) {
-                    throw new Error(`Erreur HTTP: ${response.status}`)
+                    throw new Error(`Erreur HTTP: ${response.status}`);
                 }
 
-                const data: components['schemas']['MonsterDto'][] =
-                    await response.json()
-                setMonsters(data)
+                const data: MonsterType[] = await response.json();
+                setMonsters(data);
             } catch (error) {
-                console.error('Erreur de chargement :', error)
+                console.error('Erreur de chargement :', error);
                 setError(
-                    error instanceof Error ? error.message : 'Erreur inconnue'
-                )
+                    error instanceof Error ? error.message : 'Erreur inconnue',
+                );
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
-        }
-        fetchData()
-    }, [type])
+        };
+        fetchData();
+    }, [type]);
 
     const monstersByType = useMemo(() => {
-        return monsters.reduce<
-            Record<string, components['schemas']['MonsterDto'][]>
-        >((acc, item) => {
-            const key = item.type
-            if (!acc[key]) acc[key] = []
-            acc[key].push(item)
-            return acc
-        }, {})
-    }, [monsters])
+        return monsters.reduce<Record<string, MonsterType[]>>((acc, item) => {
+            const key = item.type;
+            if (!acc[key]) acc[key] = [];
+            acc[key].push(item);
+            return acc;
+        }, {});
+    }, [monsters]);
 
     if (loading) {
         return (
@@ -68,7 +64,7 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
                 </h1>
                 <p>Chargement des produits...</p>
             </div>
-        )
+        );
     }
 
     if (error) {
@@ -81,10 +77,10 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
                 </h1>
                 <p style={{ color: 'red' }}>Erreur: {error}</p>
             </div>
-        )
+        );
     }
 
-    const showGrouped = !type || type === 'all'
+    const showGrouped = !type || type === 'all';
 
     return (
         <div>
@@ -111,7 +107,7 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
                                     ))}
                                 </div>
                             </section>
-                        )
+                        ),
                     )}
                 </div>
             ) : (
@@ -122,7 +118,7 @@ const TypeMonsters = ({ type }: TypeMonstersProps) => {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default TypeMonsters
+export default TypeMonsters;

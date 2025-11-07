@@ -4,14 +4,14 @@
  */
 
 export interface paths {
-    "/monsters": {
+    '/monsters': {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["MonsterController_getAllMonsters"];
+        get: operations['MonsterController_getAllMonsters'];
         put?: never;
         post?: never;
         delete?: never;
@@ -20,14 +20,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/monsters/{id}": {
+    '/monsters/{id}': {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["MonsterController_getMonsterById"];
+        get: operations['MonsterController_getMonsterById'];
         put?: never;
         post?: never;
         delete?: never;
@@ -36,14 +36,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/monsters/type/{type}": {
+    '/monsters/type/{type}': {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["MonsterController_getAllMonstersFromType"];
+        get: operations['MonsterController_getAllMonstersFromType'];
         put?: never;
         post?: never;
         delete?: never;
@@ -66,7 +66,19 @@ export interface components {
              * @example Ultra
              * @enum {string}
              */
-            type: "Energy" | "Ultra" | "Java" | "Juice" | "Punch" | "Rehab" | "MAXX" | "X-Presso" | "Dragon Tea" | "Espresso" | "Muscle" | "Hydro";
+            type:
+                | 'Energy'
+                | 'Ultra'
+                | 'Java'
+                | 'Juice'
+                | 'Punch'
+                | 'Rehab'
+                | 'MAXX'
+                | 'X-Presso'
+                | 'Dragon Tea'
+                | 'Espresso'
+                | 'Muscle'
+                | 'Hydro';
             /** @example The monster ultra white is a refreshing energy drink with a crisp taste. */
             description: string;
             /** @example 2.99 */
@@ -87,7 +99,19 @@ export interface operations {
         parameters: {
             query?: {
                 /** @description Filter monsters by type. */
-                type?: "Energy" | "Ultra" | "Java" | "Juice" | "Punch" | "Rehab" | "MAXX" | "X-Presso" | "Dragon Tea" | "Espresso" | "Muscle" | "Hydro";
+                type?:
+                    | 'Energy'
+                    | 'Ultra'
+                    | 'Java'
+                    | 'Juice'
+                    | 'Punch'
+                    | 'Rehab'
+                    | 'MAXX'
+                    | 'X-Presso'
+                    | 'Dragon Tea'
+                    | 'Espresso'
+                    | 'Muscle'
+                    | 'Hydro';
                 /** @description Filter monsters by partial name match (case-insensitive). */
                 name?: string;
                 /** @description Minimum price required (filters out cheaper products). */
@@ -106,7 +130,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MonsterDto"][];
+                    'application/json': components['schemas']['MonsterDto'][];
                 };
             };
         };
@@ -127,7 +151,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MonsterDto"];
+                    'application/json': components['schemas']['MonsterDto'];
                 };
             };
         };
@@ -138,7 +162,19 @@ export interface operations {
             header?: never;
             path: {
                 /** @description Monster product type (e.g., Ultra, Punch, Energy). */
-                type: "Energy" | "Ultra" | "Java" | "Juice" | "Punch" | "Rehab" | "MAXX" | "X-Presso" | "Dragon Tea" | "Espresso" | "Muscle" | "Hydro";
+                type:
+                    | 'Energy'
+                    | 'Ultra'
+                    | 'Java'
+                    | 'Juice'
+                    | 'Punch'
+                    | 'Rehab'
+                    | 'MAXX'
+                    | 'X-Presso'
+                    | 'Dragon Tea'
+                    | 'Espresso'
+                    | 'Muscle'
+                    | 'Hydro';
             };
             cookie?: never;
         };
@@ -149,7 +185,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MonsterDto"][];
+                    'application/json': components['schemas']['MonsterDto'][];
                 };
             };
         };

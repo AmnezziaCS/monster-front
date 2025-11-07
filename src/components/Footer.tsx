@@ -1,9 +1,10 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import './Footer.css'
+import React from 'react';
+import { Link } from 'react-router-dom';
+
+import './Footer.css';
 
 const Footer: React.FC = () => {
-    const year = new Date().getFullYear()
+    const year = new Date().getFullYear();
     return (
         <footer className="footer">
             <div className="container footer__grid">
@@ -160,7 +161,7 @@ const Footer: React.FC = () => {
                 </div>
             </div>
         </footer>
-    )
-}
+    );
+};
 
-export default Footer
+export default Footer;

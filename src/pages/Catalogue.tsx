@@ -1,46 +1,46 @@
-import { useLayoutEffect, useState } from 'react'
-import type { components } from '../types/api-types'
+import { useLayoutEffect, useState } from 'react';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api'
+import type { MonsterType } from '../types/front-types';
+
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 interface CatalogueProps {
-    onTypeClick?: (type: string) => void
+    onTypeClick?: (type: string) => void;
 }
 
 const Catalogue = ({ onTypeClick }: CatalogueProps) => {
-    const [types, setTypes] = useState<string[]>([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
+    const [types, setTypes] = useState<string[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useLayoutEffect(() => {
         const fetchTypes = async () => {
             try {
-                setLoading(true)
-                setError(null)
-                const response = await fetch(`${API_URL}/monsters`)
+                setLoading(true);
+                setError(null);
+                const response = await fetch(`${API_URL}/monsters`);
 
                 if (!response.ok) {
-                    throw new Error(`Erreur HTTP: ${response.status}`)
+                    throw new Error(`Erreur HTTP: ${response.status}`);
                 }
 
-                const data: components['schemas']['MonsterDto'][] =
-                    await response.json()
+                const data: MonsterType[] = await response.json();
 
                 const uniqueTypes = [
                     ...new Set(data.map((monster) => monster.type)),
-                ]
-                setTypes(uniqueTypes.sort())
+                ];
+                setTypes(uniqueTypes.sort());
             } catch (error) {
-                console.error('Erreur de chargement :', error)
+                console.error('Erreur de chargement :', error);
                 setError(
-                    error instanceof Error ? error.message : 'Erreur inconnue'
-                )
+                    error instanceof Error ? error.message : 'Erreur inconnue',
+                );
             } finally {
-                setLoading(false)
+                setLoading(false);
             }
-        }
-        fetchTypes()
-    }, [])
+        };
+        fetchTypes();
+    }, []);
 
     if (loading) {
         return (
@@ -48,7 +48,7 @@ const Catalogue = ({ onTypeClick }: CatalogueProps) => {
                 <h1>Catalogue</h1>
                 <p>Chargement des types...</p>
             </div>
-        )
+        );
     }
 
     if (error) {
@@ -57,7 +57,7 @@ const Catalogue = ({ onTypeClick }: CatalogueProps) => {
                 <h1>Catalogue</h1>
                 <p style={{ color: 'red' }}>Erreur: {error}</p>
             </div>
-        )
+        );
     }
 
     return (
@@ -70,8 +70,8 @@ const Catalogue = ({ onTypeClick }: CatalogueProps) => {
                         <a
                             href="#"
                             onClick={(e) => {
-                                e.preventDefault()
-                                onTypeClick?.(type)
+                                e.preventDefault();
+                                onTypeClick?.(type);
                             }}
                         >
                             {type}
@@ -80,7 +80,7 @@ const Catalogue = ({ onTypeClick }: CatalogueProps) => {
                 ))}
             </ul>
         </div>
-    )
-}
+    );
+};
 
-export default Catalogue
+export default Catalogue;

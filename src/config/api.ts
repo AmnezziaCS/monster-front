@@ -4,4 +4,4 @@ export const API_CONFIG = {
         MONSTERS: '/monsters',
         MONSTER_BY_ID: (id: number) => `/monsters/${id}`,
     },
-} as const
+} as const;

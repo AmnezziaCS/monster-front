@@ -1,9 +1,10 @@
-import type { components } from '../types/api-types'
-import './Monster.css'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+
+import type { MonsterType } from '../types/front-types';
+import './Monster.css';
 
 interface MonsterProps {
-    monster: components['schemas']['MonsterDto']
+    monster: MonsterType;
 }
 
 const Monster = ({ monster }: MonsterProps) => {
@@ -33,7 +34,7 @@ const Monster = ({ monster }: MonsterProps) => {
                 </div>
             </Link>
         </article>
-    )
-}
+    );
+};
 
-export default Monster
+export default Monster;
