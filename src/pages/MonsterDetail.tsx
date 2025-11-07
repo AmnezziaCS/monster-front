@@ -1,25 +1,34 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import { API_CONFIG } from '../config/api';
 import type { MonsterType } from '../types/front-types';
 import './MonsterDetail.css';
 
+const API_URL = import.meta.env.VITE_API_URL || '/api';
+
 const MonsterDetail = () => {
     const { id } = useParams();
+
     const [monster, setMonster] = useState<MonsterType | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) return;
-        const fetchOne = async () => {
+        const fetchMonster = async () => {
+            if (!id) return;
+
             try {
                 setLoading(true);
                 setError(null);
-                const BASE = (import.meta.env.VITE_API_URL as string) || '/api';
-                const url = `${BASE}${'/monsters/'}${Number(id)}`;
+
+                const url = `${API_URL}${API_CONFIG.ENDPOINTS.MONSTER_BY_ID(
+                    Number(id),
+                )}`;
+
                 const res = await fetch(url);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
                 const data: MonsterType = await res.json();
                 setMonster(data);
             } catch (e) {
@@ -28,27 +37,31 @@ const MonsterDetail = () => {
                 setLoading(false);
             }
         };
-        fetchOne();
+
+        fetchMonster();
     }, [id]);
 
-    if (loading)
+    if (loading) {
         return (
             <main className="container">
                 <p>Chargement...</p>
             </main>
         );
-    if (error)
+    }
+    if (error) {
         return (
             <main className="container">
                 <p role="alert">Erreur: {error}</p>
             </main>
         );
-    if (!monster)
+    }
+    if (!monster) {
         return (
             <main className="container">
                 <p>Produit introuvable</p>
             </main>
         );
+    }
 
     return (
         <main className="container monster-detail">
