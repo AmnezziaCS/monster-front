@@ -22,37 +22,13 @@ export async function click(page, selector, description = "") {
   if (!target) target = elements[0];
 
   await page.evaluate((el) => {
-    if (el && typeof el.scrollIntoView === "function") {
-      el.scrollIntoView({
-        behavior: "instant",
-        block: "center",
-        inline: "center",
-      });
-    }
-    if (el && typeof el.click === "function") {
-      el.click();
-    }
+    el?.scrollIntoView({ behavior: "instant", block: "center" });
+    el?.click();
   }, target);
-}
-
-export async function fillInput(page, selector, value, description = "") {
-  await page.waitForSelector(selector);
-  await page.evaluate(
-    (sel, val) => {
-      const inp = document.querySelector(sel);
-      if (!inp) return;
-      if (typeof inp.focus === "function") inp.focus();
-      inp.value = val;
-      inp.dispatchEvent(new Event("input", { bubbles: true }));
-    },
-    selector,
-    value
-  );
 }
 
 export async function scrollDownUp(page, cycles = 2, step = 400, delay = 10) {
   for (let c = 0; c < cycles; c++) {
-    // vers le bas
     await page.evaluate(
       async (s, d) => {
         const total = document.body.scrollHeight;
@@ -67,7 +43,6 @@ export async function scrollDownUp(page, cycles = 2, step = 400, delay = 10) {
       delay
     );
 
-    // vers le haut
     await page.evaluate(
       async (s, d) => {
         let y = window.scrollY;
@@ -85,8 +60,7 @@ export async function scrollDownUp(page, cycles = 2, step = 400, delay = 10) {
 
 export async function getElementsCount(page, selector) {
   await page.waitForSelector(selector);
-  const count = await page.$$eval(selector, (els) => els.length);
-  return count;
+  return await page.$$eval(selector, (els) => els.length);
 }
 
 export async function clickByIndex(page, selector, index) {
@@ -95,12 +69,8 @@ export async function clickByIndex(page, selector, index) {
   const handle = handles[index];
   if (!handle) throw new Error(`Aucun élément à l'index ${index} pour ${selector}`);
   await page.evaluate((el) => {
-    if (el && typeof el.scrollIntoView === "function") {
-      el.scrollIntoView({ behavior: "instant", block: "center", inline: "center" });
-    }
-    if (el && typeof el.click === "function") {
-      el.click();
-    }
+    el?.scrollIntoView({ behavior: "instant", block: "center" });
+    el?.click();
   }, handle);
 }
 
@@ -124,24 +94,21 @@ export async function clickByText(page, selector, text) {
   const handle = await page.evaluateHandle(
     (sel, txt) => {
       const elements = Array.from(document.querySelectorAll(sel));
-      return (
-        elements.find(
-          (el) => el.textContent && el.textContent.trim().includes(txt)
-        ) || null
+      return elements.find(
+        (el) => el.textContent && el.textContent.trim().includes(txt)
       );
     },
     selector,
     text
   );
-  if (handle) {
-    const element = handle.asElement();
-    if (element) {
-      await element.click();
-      await handle.dispose();
-      return true;
-    }
+
+  const element = handle.asElement();
+  if (element) {
+    await element.click();
+    await handle.dispose();
+    return true;
   }
+
   await handle.dispose();
   return false;
 }
-
