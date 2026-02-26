@@ -1,29 +1,18 @@
-FROM node:20-alpine AS base
+FROM node:23-alpine
 
-FROM base AS deps
+WORKDIR /usr/src/app
 
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
+# Copier les fichiers de dépendances
+COPY package.json package-lock.json ./
 
-COPY package*.json ./
+# Installer toutes les dépendances (dev incluses)
 RUN npm install
 
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Copier le reste du projet
 COPY . .
 
-RUN npm run build
+# Exposer le port Vite
+EXPOSE 5173
 
-FROM nginx:alpine AS runner
-
-RUN rm -rf /usr/share/nginx/html/*
-
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-COPY nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Lancer Vite en mode dev
+CMD ["npm", "run", "dev", "--", "--host"]
