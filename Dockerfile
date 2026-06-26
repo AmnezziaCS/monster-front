@@ -1,18 +1,13 @@
-FROM node:23-alpine
-
-WORKDIR /usr/src/app
-
-# Copier les fichiers de dépendances
-COPY package.json package-lock.json ./
-
-# Installer toutes les dépendances (dev incluses)
+FROM node:23-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
 RUN npm install
-
-# Copier le reste du projet
 COPY . .
 
-# Exposer le port Vite
-EXPOSE 5173
+RUN npm run build
 
-# Lancer Vite en mode dev
-CMD ["npm", "run", "dev", "--", "--host"]
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
