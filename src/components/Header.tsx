@@ -5,20 +5,15 @@ import './Header.css';
 
 interface HeaderProps {
     onSearch?: (searchTerm: string) => void;
-    onNavigate?: (page: string) => void;
+    onSearchSubmit?: (searchTerm: string) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onSearch, onNavigate }) => {
+const Header: React.FC<HeaderProps> = ({ onSearch, onSearchSubmit }) => {
     const [open, setOpen] = useState(false);
     return (
         <header className={`header${open ? ' is-open' : ''}`}>
             <div className="container header__inner">
-                <Link
-                    to="/"
-                    className="brand"
-                    aria-label="Monster Energy Home"
-                    onClick={() => onNavigate?.('home')}
-                >
+                <Link to="/" className="brand" aria-label="Monster Energy Home">
                     <span className="brand__mark" />
                     <span className="brand__text">Monster Front</span>
                 </Link>
@@ -40,10 +35,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onNavigate }) => {
                     <Link
                         to="/catalog"
                         className="nav__link"
-                        onClick={() => {
-                            onNavigate?.('catalogue');
-                            setOpen(false);
-                        }}
+                        onClick={() => setOpen(false)}
                     >
                         Catalogue
                     </Link>
@@ -57,8 +49,21 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onNavigate }) => {
                     </Link>
                 </nav>
 
-                <form className="search" role="search" aria-label="Recherche">
+                <form
+                    className="search"
+                    role="search"
+                    aria-label="Recherche"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        const value =
+                            e.currentTarget.elements.namedItem('search');
+                        onSearchSubmit?.(
+                            value instanceof HTMLInputElement ? value.value : '',
+                        );
+                    }}
+                >
                     <input
+                        name="search"
                         className="search__input"
                         type="search"
                         placeholder="Rechercher une canette..."

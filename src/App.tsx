@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
     BrowserRouter,
     Route,
@@ -7,6 +7,7 @@ import {
     useParams,
 } from 'react-router-dom';
 
+import { getPriceBounds } from './api';
 import './App.css';
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -31,19 +32,9 @@ function AppShell() {
         debouncedSetSearchTerm(value);
     };
 
-    const handleNavigate = (page: string) => {
-        switch (page) {
-            case 'home':
-                return navigate('/');
-            case 'catalogue':
-                return navigate('/catalog');
-            default:
-                return navigate('/');
-        }
-    };
-
-    const handleTypeClick = (type: string) => {
-        navigate(`/type/${encodeURIComponent(type)}`);
+    const handleSearchSubmit = (value: string) => {
+        setSearchTerm(value);
+        navigate('/');
     };
 
     const [sliderMin, setSliderMin] = useState(0);
@@ -54,74 +45,19 @@ function AppShell() {
     const [maxPrice, setMaxPrice] = useState<number | undefined>(undefined);
 
     useEffect(() => {
-        const API_URL = import.meta.env.VITE_API_URL || '/api';
-        const fetchRange = async () => {
-            try {
-                const tryEndpoints = [
-                    `${API_URL}/monsters/price-range`,
-                    `${API_URL}/monsters`,
-                    '/monsters.json',
-                ];
-
-                for (const url of tryEndpoints) {
-                    try {
-                        const res = await fetch(url);
-                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                        const data = await res.json();
-
-                        if (
-                            data &&
-                            (typeof data.min === 'number' ||
-                                typeof data.minPrice === 'number')
-                        ) {
-                            const min =
-                                typeof data.min === 'number'
-                                    ? data.min
-                                    : data.minPrice;
-                            const max =
-                                typeof data.max === 'number'
-                                    ? data.max
-                                    : data.maxPrice;
-                            setBoundsMin(min ?? 0);
-                            setBoundsMax(max ?? 10);
-                            setSliderMin(min ?? 0);
-                            setSliderMax(max ?? 10);
-                            setMinPrice(min ?? 0);
-                            setMaxPrice(max ?? 10);
-                            return;
-                        }
-
-                        if (Array.isArray(data)) {
-                            const prices = data
-                                .map((m: Record<string, unknown>) => {
-                                    const p = m.price as unknown;
-                                    return typeof p === 'number'
-                                        ? p
-                                        : Number(String(p));
-                                })
-                                .filter((p: number) => Number.isFinite(p));
-                            if (prices.length > 0) {
-                                const min = Math.min(...prices);
-                                const max = Math.max(...prices);
-                                setBoundsMin(min);
-                                setBoundsMax(max);
-                                setSliderMin(min);
-                                setSliderMax(max);
-                                setMinPrice(min);
-                                setMaxPrice(max);
-                                return;
-                            }
-                        }
-                    } catch {
-                        // try next endpoint
-                        // console.warn('Range fetch failed for', url, e);
-                    }
-                }
-            } catch {
-                // ignore - keep defaults
-            }
+        let cancelled = false;
+        getPriceBounds().then((bounds) => {
+            if (cancelled || !bounds) return;
+            setBoundsMin(bounds.min);
+            setBoundsMax(bounds.max);
+            setSliderMin(bounds.min);
+            setSliderMax(bounds.max);
+            setMinPrice(bounds.min);
+            setMaxPrice(bounds.max);
+        });
+        return () => {
+            cancelled = true;
         };
-        fetchRange();
     }, []);
 
     const handlePriceChange = (min: number, max: number) => {
@@ -133,7 +69,7 @@ function AppShell() {
 
     return (
         <div className="app-shell">
-            <Header onSearch={handleSearch} onNavigate={handleNavigate} />
+            <Header onSearch={handleSearch} onSearchSubmit={handleSearchSubmit} />
             <main className="container main">
                 <Routes>
                     <Route
@@ -160,7 +96,7 @@ function AppShell() {
                     />
                     <Route
                         path="/catalog"
-                        element={<Catalogue onTypeClick={handleTypeClick} />}
+                        element={<Catalogue />}
                     />
                     <Route path="/flavors" element={<Flavors />} />
                     <Route path="/type/:type" element={<TypeRoute />} />
