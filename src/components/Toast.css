@@ -1,0 +1,30 @@
+.toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: var(--text);
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    font-weight: 600;
+    z-index: 1000;
+    animation: toast-in 0.18s ease;
+}
+.toast--success {
+    border-color: rgba(16, 185, 129, 0.5);
+}
+.toast--error {
+    border-color: #ff6b6b;
+}
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

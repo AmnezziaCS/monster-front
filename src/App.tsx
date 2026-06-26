@@ -13,11 +13,14 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import MonsterList from './components/MonsterList';
 import PriceSlider from './components/PriceSlider';
+import RequireAdmin from './components/RequireAdmin';
 import useDebounce from './hooks/useDebounce';
+import Admin from './pages/Admin';
 import Catalogue from './pages/Catalogue';
 import Contact from './pages/Contact';
 import Flavors from './pages/Flavors';
 import MonsterDetail from './pages/MonsterDetail';
+import Panel from './pages/Panel';
 import TypeMonsters from './pages/TypeMonsters';
 
 function AppShell() {
@@ -101,6 +104,15 @@ function AppShell() {
                     <Route path="/flavors" element={<Flavors />} />
                     <Route path="/type/:type" element={<TypeRoute />} />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/admin" element={<Admin />} />
+                    <Route
+                        path="/admin/panel"
+                        element={
+                            <RequireAdmin>
+                                <Panel />
+                            </RequireAdmin>
+                        }
+                    />
                     <Route path="/:id" element={<MonsterDetail />} />
                 </Routes>
             </main>
